@@ -76,11 +76,11 @@ What makes this project unique is the **Edge AI** layer: a computer vision syste
 ### Prerequisites
 
 You must have the following software installed on your system:
-- **Node.js** (v18+)
-- **Python** (3.10+)
-- **Mosquitto MQTT Broker**
-- **Factory I/O** (with Sorting Station scene)
-- **Schneider Machine Expert Basic** (for PLC programming)
+- [Node.js](https://nodejs.org/) (v18+)
+- [Python](https://www.python.org/) (3.10+)
+- [Mosquitto MQTT Broker](https://mosquitto.org/)
+- [Factory I/O](https://factoryio.com/) (with Sorting Station scene)
+- [Schneider Machine Expert Basic](https://www.se.com/) (for PLC programming)
 
 ### 1. Install Node-RED and required palettes
 

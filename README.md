@@ -107,7 +107,7 @@ cd vision/
 pip install -r requirements.txt
 ```
 
-> **Note:** The `hand_landmarker.task` model file (~7.5 MB) is required for hand detection mode. Download it from [MediaPipe Models](https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task) and place it in the `vision/` directory.
+> **Note:** The `hand_landmarker.task` model file (~7.5 MB) is required for hand detection mode. Download it from MediaPipe Models) and place it in the `vision/` directory.
 
 ### 4. Run the AI detector
 
@@ -126,18 +126,6 @@ python detector.py --mode screen
 
 - **Local:** `http://localhost:1880/ui`
 - **Mobile/Tablet:** `http://<YOUR_PC_IP>:1880/ui`
-
----
-
-## Screenshots
-
-> *Add screenshots of your dashboard, Factory IO scene, and hand detection in action here.*
-
-<!-- Uncomment and replace with your actual screenshots:
-![Dashboard](docs/screenshots/dashboard.png)
-![Hand Detection](docs/screenshots/hand_detection.png)
-![Factory IO](docs/screenshots/factory_io.png)
--->
 
 ---
 

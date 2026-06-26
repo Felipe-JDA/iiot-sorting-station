@@ -202,10 +202,10 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 **Jhoan Felipe Delgado Acevedo** — Industrial Networks & Communications Engineering Student
 
 * GitHub: [@Felipe-JDA](https://github.com/Felipe-JDA)
-* LinkedIn: [Jhoan Felipe Delgado Acevedo](https://www.linkedin.com/) *(Añade aquí tu link real)*
+* LinkedIn: [Jhoan Felipe Delgado Acevedo](https://www.linkedin.com/in/jhoan-felipe-delgado-acevedo-8240a2355)
 
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by Félex</sub>
+  <sub>By FelipeJDA</sub>
 </div>

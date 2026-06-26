@@ -8,7 +8,7 @@
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-0097A7?style=for-the-badge&logo=google&logoColor=white)
 
-**A full-stack Industrial IoT system that classifies factory parts using AI hand-gesture recognition, real-time dashboards, WhatsApp alerts, and PLC communication over Modbus TCP.**
+**A full-stack Industrial IoT system that classifies factory parts using AI hand-gesture recognition, real-time dashboards, Telegram alerts, and PLC communication over Modbus TCP.**
 
 [Features](#-features) · [Architecture](#-architecture) · [Quick Start](#-quick-start) · [Tech Stack](#-tech-stack)
 
@@ -33,7 +33,7 @@ What makes this project unique is the **Edge AI** layer: a computer vision syste
 | **Remote Dashboard** | Real-time web HMI with dark industrial theme, live counters, LED indicators, and trend charts |
 | **AI Hand Detection** | MediaPipe-powered finger counting that maps gestures to sorting commands |
 | **MQTT + Modbus TCP** | Full IT/OT convergence — Python → MQTT → Node-RED → Modbus → PLC |
-| **WhatsApp Alerts** | Automatic notifications when production thresholds or emergency stops are triggered |
+| **Telegram Alerts** | Automatic notifications when production thresholds or emergency stops are triggered |
 | **CSV Report Generation** | One-click export of production history with timestamps, counters, and sensor states |
 | **Dual Control** | Operate from the physical Factory IO panel OR the web dashboard simultaneously |
 | **Emergency System** | Safety-compliant emergency stop with lockout/reset sequence |
@@ -56,7 +56,7 @@ What makes this project unique is the **Edge AI** layer: a computer vision syste
 └──┬────┬────┬────┬───┘                     └─────────────────────┘
    │    │    │    │                                    ▲
    ▼    ▼    ▼    ▼                                    │
-  Web  WhatsApp CSV  Modbus                         Webcam
+  Web  Telegram CSV  Modbus                         Webcam
  Dashboard Alerts Reports Write                    (Real-time)
 ```
 
@@ -76,11 +76,11 @@ What makes this project unique is the **Edge AI** layer: a computer vision syste
 ### Prerequisites
 
 You must have the following software installed on your system:
-- **Node.js** (v18+)
-- **Python** (3.10+)
-- **Mosquitto MQTT Broker**
-- **Factory I/O** (with Sorting Station scene)
-- **Schneider Machine Expert Basic** (for PLC programming)
+- [Node.js](https://nodejs.org/) (v18+)
+- [Python](https://www.python.org/) (3.10+)
+- [Mosquitto MQTT Broker](https://mosquitto.org/)
+- [Factory I/O](https://factoryio.com/) (with Sorting Station scene)
+- [Schneider Machine Expert Basic](https://www.se.com/) (for PLC programming)
 
 ### 1. Install Node-RED and required palettes
 

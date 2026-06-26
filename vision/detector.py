@@ -72,7 +72,7 @@ COLOR_RANGES = {
         "min_area": 3000,
         "label": "🟢 GREEN"
     },
-    "METALICO": {
+    "METALLIC": {
         "lower": np.array([0, 0, 120]),
         "upper": np.array([180, 50, 220]),
         "bgr": (180, 180, 180),
@@ -82,7 +82,7 @@ COLOR_RANGES = {
 }
 
 # ═══════════════════════════════════════════════════════════════
-# TÓPICOS MQTT
+# MQTT TOPICS
 # ═══════════════════════════════════════════════════════════════
 TOPIC_RESULTADO = "planta/vision/resultado"
 TOPIC_IMAGEN    = "planta/vision/imagen"
@@ -91,14 +91,14 @@ TOPIC_CONFIG    = "planta/vision/config"
 TOPIC_QR_COLOR  = "planta/vision/qr_color"
 
 # ═══════════════════════════════════════════════════════════════
-# MAPEO DE DEDOS → COLOR (para modo "hands")
+# FINGER → COLOR MAP (for "hands" mode)
 # ═══════════════════════════════════════════════════════════════
 FINGER_MAP = {
-    0: "NINGUNO",
+    0: "NONE",
     1: "BLUE",
     2: "GREEN",
-    3: "METALICO",
-    4: "METALICO",   # 4 fingers also count as metallic
+    3: "METALLIC",
+    4: "METALLIC",   # 4 fingers also count as metallic
 }
 
 
@@ -121,16 +121,16 @@ class ColorDetector:
         self.frame_height = 480
 
         # Detection counters
-        self.counters = {"BLUE": 0, "GREEN": 0, "METALICO": 0, "TOTAL": 0}
-        self.last_detection = "NINGUNO"
-        self.last_detection_stable = "NINGUNO"
+        self.counters = {"BLUE": 0, "GREEN": 0, "METALLIC": 0, "TOTAL": 0}
+        self.last_detection = "NONE"
+        self.last_detection_stable = "NONE"
         self.detection_buffer = []  # Buffer to stabilize detection
         self.buffer_size = 5        # Number of frames to confirm detection
 
         # QR code reader configuration
         self.qr_detector = cv2.QRCodeDetector()
         self.bypass_color = 0
-        self.bypass_color_name = "NINGUNO"
+        self.bypass_color_name = "NONE"
         self.last_qr_text = ""
         self.cap = None
 
@@ -161,9 +161,9 @@ class ColorDetector:
         }), qos=1, retain=True)
 
     def _on_connect(self, client, userdata, flags, rc):
-        """Callback cuando se conecta al broker MQTT."""
+        """Callback when connecting to the MQTT broker."""
         if rc == 0:
-            print(f"  ✅ Conectado al broker MQTT ({self.broker}:{self.port})")
+            print(f"  ✅ Connected to MQTT broker ({self.broker}:{self.port})")
             # Subscribe to configuration
             client.subscribe(TOPIC_CONFIG, qos=1)
             # Publish online status
@@ -195,11 +195,11 @@ class ColorDetector:
                 print(f"     Intervalo de imagen: {self.image_interval}s")
 
             if "reset_counters" in config and config["reset_counters"]:
-                self.counters = {"BLUE": 0, "GREEN": 0, "METALICO": 0, "TOTAL": 0}
+                self.counters = {"BLUE": 0, "GREEN": 0, "METALLIC": 0, "TOTAL": 0}
                 print("     🔄 Counters reset")
 
             # Update color ranges dynamically
-            for color_name in ["BLUE", "GREEN", "METALICO"]:
+            for color_name in ["BLUE", "GREEN", "METALLIC"]:
                 if color_name in config:
                     color_cfg = config[color_name]
                     if "lower" in color_cfg:
@@ -208,7 +208,7 @@ class ColorDetector:
                         COLOR_RANGES[color_name]["upper"] = np.array(color_cfg["upper"])
                     if "min_area" in color_cfg:
                         COLOR_RANGES[color_name]["min_area"] = int(color_cfg["min_area"])
-                    print(f"     🎨 Rango de {color_name} actualizado")
+                    print(f"     🎨 Range of {color_name} updated")
 
         except json.JSONDecodeError:
             print(f"  ⚠️ Configuration message is not valid JSON")
@@ -216,7 +216,7 @@ class ColorDetector:
             print(f"  ⚠️ Error processing configuration: {e}")
 
     def _on_disconnect(self, client, userdata, rc):
-        """Callback cuando se desconecta del broker MQTT."""
+        """Callback when disconnecting from the MQTT broker."""
         if rc != 0:
             print(f"  ⚠️ Unexpected disconnection from MQTT broker (rc={rc})")
 
@@ -225,21 +225,21 @@ class ColorDetector:
         Detects colors in the frame and returns the classification.
 
         Args:
-            frame: Frame BGR de OpenCV
+            frame: OpenCV BGR Frame
 
         Returns:
             tuple: (detected_color, results_dict, annotated_frame)
         """
-        # Convertir a HSV
+        # Convert to HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         annotated = frame.copy()
 
-        # Aplicar desenfoque para reducir ruido
+        # Apply blur to reduce noise
         hsv_blurred = cv2.GaussianBlur(hsv, (11, 11), 0)
 
         results = {}
         max_area = 0
-        dominant_color = "NINGUNO"
+        dominant_color = "NONE"
 
         for color_name, color_config in COLOR_RANGES.items():
             # Create mask
@@ -250,7 +250,7 @@ class ColorDetector:
             mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-            # Encontrar contornos
+            # Find contours
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
             # Filter by minimum area
@@ -265,7 +265,7 @@ class ColorDetector:
                 "area_total": int(total_area)
             }
 
-            # Dibujar contornos y bounding boxes
+            # Draw contours and bounding boxes
             for contour in valid_contours:
                 x, y, w, h = cv2.boundingRect(contour)
                 cv2.rectangle(annotated, (x, y), (x + w, y + h), color_config["bgr"], 3)
@@ -307,7 +307,7 @@ class ColorDetector:
         """
         Stabilizes detection using a buffer to avoid false counts.
         Only counts a new part if detection is consistent for N frames
-        y luego cambia a NINGUNO.
+        and then changes to NONE.
         """
         self.detection_buffer.append(current_detection)
         if len(self.detection_buffer) > self.buffer_size:
@@ -317,16 +317,16 @@ class ColorDetector:
         if len(self.detection_buffer) >= self.buffer_size:
             from collections import Counter
             most_common = Counter(self.detection_buffer).most_common(1)[0]
-            if most_common[1] >= self.buffer_size * 0.8:  # 80% de coincidencia
+            if most_common[1] >= self.buffer_size * 0.8:  # 80% match
                 new_stable = most_common[0]
 
                 # If transition from NONE to a color → new part detected
-                if (self.last_detection_stable == "NINGUNO" and
-                    new_stable != "NINGUNO" and
+                if (self.last_detection_stable == "NONE" and
+                    new_stable != "NONE" and
                     new_stable in self.counters):
                     self.counters[new_stable] += 1
                     self.counters["TOTAL"] += 1
-                    print(f"  🎯 Nueva pieza: {new_stable} "
+                    print(f"  🎯 New part: {new_stable} "
                           f"(Total: {self.counters['TOTAL']})")
 
                 self.last_detection_stable = new_stable
@@ -357,10 +357,10 @@ class ColorDetector:
         print("║  COLOR & QR DETECTOR — IIoT Sorting Station        ║")
         print("║  Edge AI Vision System     ║")
         print("╚══════════════════════════════════════════════════╝")
-        print(f"  Modo activo: {self.mode.upper()}")
+        print(f"  Active mode: {self.mode.upper()}")
         print()
 
-        # ── Verificar MediaPipe si modo "hands" ──
+        # ── Check MediaPipe if "hands" mode ──
         if self.mode == "hands":
             if mp is None:
                 print("  ❌ ERROR: mediapipe is not installed.")
@@ -370,10 +370,10 @@ class ColorDetector:
                 print("  ❌ ERROR: No se pudo cargar el modelo hand_landmarker.task.")
                 print("  Make sure the file exists in the same folder as detector.py")
                 return
-            print("  🖐️  MediaPipe Hands cargado correctamente")
+            print("  🖐️  MediaPipe Hands loaded successfully")
 
-        # ── Conectar MQTT ──
-        print(f"  🔌 Conectando a MQTT broker {self.broker}:{self.port}...")
+        # ── Connect MQTT ──
+        print(f"  🔌 Connecting to MQTT broker {self.broker}:{self.port}...")
         try:
             self.client.connect(self.broker, self.port, keepalive=60)
             self.client.loop_start()
@@ -383,9 +383,9 @@ class ColorDetector:
             print(f"     Make sure Mosquitto is running.")
             return
 
-        # ── Inicializar Fuente de Captura ──
+        # ── Initialize Capture Source ──
         if self.mode == "screen":
-            print("  📷 Iniciando captura de pantalla...")
+            print("  📷 Starting screen capture...")
             try:
                 import mss
             except ImportError:
@@ -396,14 +396,14 @@ class ColorDetector:
                 return
 
             self.sct = mss.mss()
-            self.monitor = self.sct.monitors[1]  # Monitor principal
-            print(f"  ✅ Captura de pantalla iniciada: {self.monitor['width']}x{self.monitor['height']}")
+            self.monitor = self.sct.monitors[1]  # Main monitor
+            print(f"  ✅ Screen capture started: {self.monitor['width']}x{self.monitor['height']}")
         else:
-            # Modos "camera" y "hands" usan la webcam
-            print(f"  📷 Iniciando webcam (ID: {self.camera_id})...")
+            # "camera" and "hands" modes use the webcam
+            print(f"  📷 Starting webcam (ID: {self.camera_id})...")
             self.cap = cv2.VideoCapture(self.camera_id)
             if not self.cap.isOpened():
-                print(f"  ❌ ERROR: No se pudo abrir la webcam con ID {self.camera_id}")
+                print(f"  ❌ ERROR: Could not open webcam with ID {self.camera_id}")
                 self.client.loop_stop()
                 self.client.disconnect()
                 return
@@ -414,10 +414,10 @@ class ColorDetector:
         print()
         if self.mode == "hands":
             print("  ─── MODO DEDOS ACTIVO ───")
-            print("  ☝️  1 dedo  = BLUE")
-            print("  ✌️  2 dedos = GREEN")
-            print("  🤟 3+ dedos = METALLIC")
-            print("  ✊ 0 dedos  = Sin pieza")
+            print("  ☝️  1 finger  = BLUE")
+            print("  ✌️  2 fingers = GREEN")
+            print("  🤟 3+ fingers = METALLIC")
+            print("  ✊ 0 fingers = No part")
             print()
         print("  ─── Press 'q' to quit, 'r' to reset ───")
         print()
@@ -429,7 +429,7 @@ class ColorDetector:
                 current_time = time.time()
 
                 if self.mode == "screen":
-                    # Capturar pantalla con mss
+                    # Capture screen with mss
                     screenshot = self.sct.grab(self.monitor)
                     frame_bgra = np.array(screenshot)
                     frame = cv2.cvtColor(frame_bgra, cv2.COLOR_BGRA2BGR)
@@ -438,7 +438,7 @@ class ColorDetector:
                     # Capture from physical webcam (camera and hands)
                     ret, frame = self.cap.read()
                     if not ret:
-                        print("  ⚠️ Error leyendo frame de la webcam.")
+                        print("  ⚠️ Error reading frame from webcam.")
                         time.sleep(0.1)
                         continue
 
@@ -467,7 +467,7 @@ class ColorDetector:
                         # ══════════════════════════════════════════
                         # ── Finger Detection Mode (MediaPipe) ──
                         # ══════════════════════════════════════════
-                        # Voltear horizontalmente para efecto espejo
+                        # Flip horizontally for mirror effect
                         frame_flipped = cv2.flip(frame, 1)
                         annotated = frame_flipped.copy()
 
@@ -480,24 +480,24 @@ class ColorDetector:
                             hand_results = None
 
                         finger_count = 0
-                        finger_color = "NINGUNO"
+                        finger_color = "NONE"
 
                         if hand_results and hand_results.hand_landmarks:
                             hand_lm = hand_results.hand_landmarks[0]
 
-                            # Dibujar puntos en la mano
+                            # Draw points on the hand
                             for lm in hand_lm:
                                 x, y = int(lm.x * self.frame_width), int(lm.y * self.frame_height)
                                 cv2.circle(annotated, (x, y), 6, (0, 210, 255), -1)
 
                             finger_count = self._count_fingers(hand_lm)
-                            finger_color = FINGER_MAP.get(finger_count, "METALICO")
+                            finger_color = FINGER_MAP.get(finger_count, "METALLIC")
 
                         # Stabilize detection
                         stable_color = self._stabilize_detection(finger_color)
 
                         # ── Dibujar HUD (interfaz visual sobre el video) ──
-                        # Barra superior semi-transparente
+                        # Semi-transparent top bar
                         overlay = annotated.copy()
                         cv2.rectangle(overlay, (0, 0), (self.frame_width, 95), (15, 15, 30), -1)
                         annotated = cv2.addWeighted(overlay, 0.75, annotated, 0.25, 0)
@@ -510,8 +510,8 @@ class ColorDetector:
                         color_bgr_map = {
                             "BLUE": (255, 100, 0),
                             "GREEN": (0, 255, 100),
-                            "METALICO": (200, 200, 200),
-                            "NINGUNO": (80, 80, 80)
+                            "METALLIC": (200, 200, 200),
+                            "NONE": (80, 80, 80)
                         }
                         det_bgr = color_bgr_map.get(finger_color, (255, 255, 255))
 
@@ -521,12 +521,12 @@ class ColorDetector:
                         cv2.putText(annotated, f"-> {finger_color}",
                                     (180, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.8, det_bgr, 2)
 
-                        # Indicador de color estable
+                        # Stable color indicator
                         stable_bgr = color_bgr_map.get(stable_color, (255, 255, 255))
-                        cv2.putText(annotated, f"Pieza estable: {stable_color}",
+                        cv2.putText(annotated, f"Stable part: {stable_color}",
                                     (15, 85), cv2.FONT_HERSHEY_SIMPLEX, 0.6, stable_bgr, 2)
 
-                        # Indicador LED circular grande (esquina superior derecha)
+                        # Large circular LED indicator (top right corner)
                         led_x = self.frame_width - 50
                         led_y = 45
                         cv2.circle(annotated, (led_x, led_y), 25, det_bgr, -1)
@@ -540,7 +540,7 @@ class ColorDetector:
 
                         # Counters in the bottom bar
                         x_pos = 15
-                        for cn in ["BLUE", "GREEN", "METALICO"]:
+                        for cn in ["BLUE", "GREEN", "METALLIC"]:
                             c_bgr = COLOR_RANGES[cn]["bgr"]
                             label = f"{cn}: {self.counters[cn]}"
                             cv2.putText(annotated, label, (x_pos, self.frame_height - 30),
@@ -563,7 +563,7 @@ class ColorDetector:
                             self.last_detection_time = current_time
                             result = {
                                 "detected_color": stable_color,
-                                "dedos": finger_count,
+                                "fingers": finger_count,
                                 "color_instantaneo": finger_color,
                                 "counters": self.counters.copy(),
                                 "timestamp": datetime.now().isoformat(),
@@ -575,7 +575,7 @@ class ColorDetector:
                             new_bypass_color = 0
                             if stable_color == "BLUE": new_bypass_color = 1
                             elif stable_color == "GREEN": new_bypass_color = 4
-                            elif stable_color == "METALICO": new_bypass_color = 7
+                            elif stable_color == "METALLIC": new_bypass_color = 7
                             
                             if new_bypass_color != self.bypass_color:
                                 self.bypass_color = new_bypass_color
@@ -587,7 +587,7 @@ class ColorDetector:
                                     "timestamp": datetime.now().isoformat()
                                 }
                                 self.client.publish(TOPIC_QR_COLOR, json.dumps(payload), qos=1, retain=True)
-                                print(f"  🤖 PLC Bypass Actualizado: {self.bypass_color_name} ({self.bypass_color})")
+                                print(f"  🤖 PLC Bypass Updated: {self.bypass_color_name} ({self.bypass_color})")
 
 
                     else:
@@ -599,7 +599,7 @@ class ColorDetector:
                             new_bypass_color = self.bypass_color
                             new_bypass_name = self.bypass_color_name
 
-                            # Clasificar contenido del QR
+                            # Classify QR content
                             if any(word in text_clean for word in ["azul", "blue", "1"]):
                                 new_bypass_color = 1
                                 new_bypass_name = "BLUE"
@@ -608,10 +608,10 @@ class ColorDetector:
                                 new_bypass_name = "GREEN"
                             elif any(word in text_clean for word in ["metal", "gris", "gray", "silver", "7"]):
                                 new_bypass_color = 7
-                                new_bypass_name = "METALICO"
+                                new_bypass_name = "METALLIC"
                             elif any(word in text_clean for word in ["ninguno", "none", "clear", "0"]):
                                 new_bypass_color = 0
-                                new_bypass_name = "NINGUNO"
+                                new_bypass_name = "NONE"
 
                             # If changed, publish and notify
                             if new_bypass_color != self.bypass_color or val != self.last_qr_text:
@@ -646,10 +646,10 @@ class ColorDetector:
                             text_color = COLOR_RANGES["BLUE"]["bgr"]
                         elif self.bypass_color_name == "GREEN":
                             text_color = COLOR_RANGES["GREEN"]["bgr"]
-                        elif self.bypass_color_name == "METALICO":
-                            text_color = COLOR_RANGES["METALICO"]["bgr"]
+                        elif self.bypass_color_name == "METALLIC":
+                            text_color = COLOR_RANGES["METALLIC"]["bgr"]
 
-                        cv2.putText(annotated, f"Bypass FIO Activo: {self.bypass_color_name}", (15, 50),
+                        cv2.putText(annotated, f"Active FIO Bypass: {self.bypass_color_name}", (15, 50),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, text_color, 2)
 
                         # Timestamp
@@ -669,43 +669,43 @@ class ColorDetector:
                             qos=0
                         )
                 else:
-                    cv2.putText(annotated, "DETECCION PAUSADA", (10, 30),
+                    cv2.putText(annotated, "DETECTION PAUSED", (10, 30),
                                cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
 
                 # ── Show local window ──
                 cv2.imshow("Vision Sorting Station - IIoT", annotated)
 
-                # ── Comprobar tecla 'q' para salir o 'r' para reset ──
+                # ── Check 'q' key to quit or 'r' for reset ──
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord('q'):
-                    print("\n  🛑 Deteniendo detector...")
+                    print("\n  🛑 Stopping detector...")
                     break
                 elif key == ord('r'):
                     if self.mode in ("screen", "hands"):
-                        self.counters = {"BLUE": 0, "GREEN": 0, "METALICO": 0, "TOTAL": 0}
-                        self.last_detection_stable = "NINGUNO"
+                        self.counters = {"BLUE": 0, "GREEN": 0, "METALLIC": 0, "TOTAL": 0}
+                        self.last_detection_stable = "NONE"
                         self.detection_buffer.clear()
-                        print("  🔄 Counters reset (tecla 'r')")
+                        print("  🔄 Counters reset (key 'r')")
                     else:
                         self.bypass_color = 0
-                        self.bypass_color_name = "NINGUNO"
+                        self.bypass_color_name = "NONE"
                         self.last_qr_text = ""
                         self.client.publish(TOPIC_QR_COLOR, json.dumps({
                             "bypass_color": 0,
-                            "color_name": "NINGUNO",
+                            "color_name": "NONE",
                             "qr_text": "reset",
                             "timestamp": datetime.now().isoformat()
                         }), qos=1, retain=True)
-                        print("  🔄 Bypass QR reiniciado a NINGUNO (tecla 'r')")
+                        print("  🔄 Bypass QR reset to NONE (key 'r')")
 
         except KeyboardInterrupt:
             print("\n  🛑 Keyboard interrupt, closing...")
 
         finally:
-            # ── Limpieza ──
+            # ── Cleanup ──
             self.running = False
 
-            # Cerrar MediaPipe si estaba activo
+            # Close MediaPipe if it was active
             if self.mp_hands_detector is not None:
                 self.mp_hands_detector.close()
 
@@ -724,7 +724,7 @@ class ColorDetector:
             self.client.loop_stop()
             self.client.disconnect()
 
-            print("  ✅ Detector cerrado correctamente")
+            print("  ✅ Detector closed successfully")
             if self.mode in ("screen", "hands"):
                 print(f"  📊 Final statistics: {self.counters}")
             else:
@@ -749,7 +749,7 @@ def main():
     )
     parser.add_argument(
         "--mode", type=str, default="hands", choices=["camera", "screen", "hands"],
-        help="Modo: 'camera' (QR), 'screen' (color pantalla), 'hands' (dedos=color) (default: hands)"
+        help="Mode: 'camera' (QR), 'screen' (screen color), 'hands' (fingers=color) (default: hands)"
     )
     parser.add_argument(
         "--no-images", action="store_true",
@@ -757,11 +757,11 @@ def main():
     )
     parser.add_argument(
         "--width", type=int, default=640,
-        help="Ancho del frame (default: 640)"
+        help="Frame width (default: 640)"
     )
     parser.add_argument(
         "--height", type=int, default=480,
-        help="Alto del frame (default: 480)"
+        help="Frame height (default: 480)"
     )
 
     args = parser.parse_args()

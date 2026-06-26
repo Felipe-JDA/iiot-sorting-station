@@ -54,14 +54,14 @@ except ImportError:
 # ═══════════════════════════════════════════════════════════════
 # COLOR CONFIGURATION (HSV)
 # ═══════════════════════════════════════════════════════════════
-# Cada color se define por un rango en el espacio HSV.
-# H: 0-179, S: 0-255, V: 0-255 (en OpenCV)
+# Each color is defined by a range in the HSV space.
+# H: 0-179, S: 0-255, V: 0-255 (in OpenCV)
 
 COLOR_RANGES = {
     "BLUE": {
         "lower": np.array([100, 80, 50]),
         "upper": np.array([130, 255, 255]),
-        "bgr": (255, 100, 0),       # Color para dibujar (BGR)
+        "bgr": (255, 100, 0),       # Color to draw (BGR)
         "min_area": 3000,            # Minimum area in pixels to consider detection
         "label": "🔵 BLUE"
     },
@@ -184,11 +184,11 @@ class ColorDetector:
 
             if "send_images" in config:
                 self.send_images = bool(config["send_images"])
-                print(f"     Envío de imágenes: {'ON' if self.send_images else 'OFF'}")
+                print(f"     Image streaming: {'ON' if self.send_images else 'OFF'}")
 
             if "detection_enabled" in config:
                 self.detection_enabled = bool(config["detection_enabled"])
-                print(f"     Detección: {'ON' if self.detection_enabled else 'OFF'}")
+                print(f"     Detection: {'ON' if self.detection_enabled else 'OFF'}")
 
             if "image_interval" in config:
                 self.image_interval = max(0.1, float(config["image_interval"]))
@@ -305,8 +305,8 @@ class ColorDetector:
 
     def _stabilize_detection(self, current_detection):
         """
-        Estabiliza la detección usando un buffer para evitar conteos falsos.
-        Solo cuenta una pieza nueva si la detección es consistente por N frames
+        Stabilizes detection using a buffer to avoid false counts.
+        Only counts a new part if detection is consistent for N frames
         y luego cambia a NINGUNO.
         """
         self.detection_buffer.append(current_detection)
@@ -363,12 +363,12 @@ class ColorDetector:
         # ── Verificar MediaPipe si modo "hands" ──
         if self.mode == "hands":
             if mp is None:
-                print("  ❌ ERROR: mediapipe no está instalado.")
+                print("  ❌ ERROR: mediapipe is not installed.")
                 print("  ➡️  Run: pip install mediapipe")
                 return
             if self.mp_hands_detector is None:
                 print("  ❌ ERROR: No se pudo cargar el modelo hand_landmarker.task.")
-                print("  Asegúrese de que el archivo existe en la misma carpeta que detector.py")
+                print("  Make sure the file exists in the same folder as detector.py")
                 return
             print("  🖐️  MediaPipe Hands cargado correctamente")
 
@@ -379,8 +379,8 @@ class ColorDetector:
             self.client.loop_start()
             time.sleep(1)  # Wait for connection
         except Exception as e:
-            print(f"  ❌ No se pudo conectar al broker MQTT: {e}")
-            print(f"     Asegúrese de que Mosquitto esté ejecutándose.")
+            print(f"  ❌ Could not connect to MQTT broker: {e}")
+            print(f"     Make sure Mosquitto is running.")
             return
 
         # ── Inicializar Fuente de Captura ──
@@ -389,8 +389,8 @@ class ColorDetector:
             try:
                 import mss
             except ImportError:
-                print("  ❌ ERROR: Falta la librería mss para capturar la pantalla.")
-                print("  ➡️ Por favor, instala la librería ejecutando: pip install mss")
+                print("  ❌ ERROR: Missing mss library to capture screen.")
+                print("  ➡️ Please install the library by running: pip install mss")
                 self.client.loop_stop()
                 self.client.disconnect()
                 return
@@ -409,7 +409,7 @@ class ColorDetector:
                 return
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_width)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_height)
-            print("  ✅ Webcam iniciada con éxito.")
+            print("  ✅ Webcam started successfully.")
 
         print()
         if self.mode == "hands":
@@ -459,7 +459,7 @@ class ColorDetector:
                                 "detalles": results,
                                 "counters": self.counters.copy(),
                                 "timestamp": datetime.now().isoformat(),
-                                "deteccion_activa": True
+                                "detection_active": True
                             }
                             self.client.publish(TOPIC_RESULTADO, json.dumps(result), qos=0)
 
@@ -567,7 +567,7 @@ class ColorDetector:
                                 "color_instantaneo": finger_color,
                                 "counters": self.counters.copy(),
                                 "timestamp": datetime.now().isoformat(),
-                                "deteccion_activa": True
+                                "detection_active": True
                             }
                             self.client.publish(TOPIC_RESULTADO, json.dumps(result), qos=0)
                             
@@ -699,7 +699,7 @@ class ColorDetector:
                         print("  🔄 Bypass QR reiniciado a NINGUNO (tecla 'r')")
 
         except KeyboardInterrupt:
-            print("\n  🛑 Interrupción por teclado, cerrando...")
+            print("\n  🛑 Keyboard interrupt, closing...")
 
         finally:
             # ── Limpieza ──
@@ -726,7 +726,7 @@ class ColorDetector:
 
             print("  ✅ Detector cerrado correctamente")
             if self.mode in ("screen", "hands"):
-                print(f"  📊 Estadísticas finales: {self.counters}")
+                print(f"  📊 Final statistics: {self.counters}")
             else:
                 print(f"  📊 Final bypass status: {self.bypass_color_name}")
 
@@ -745,7 +745,7 @@ def main():
     )
     parser.add_argument(
         "--camera", type=int, default=0,
-        help="ID de la cámara (default: 0)"
+        help="Camera ID (default: 0)"
     )
     parser.add_argument(
         "--mode", type=str, default="hands", choices=["camera", "screen", "hands"],

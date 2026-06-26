@@ -1,0 +1,1787 @@
+[
+    {
+        "id": "flow_plc",
+        "type": "tab",
+        "label": "1. PLC Communication",
+        "disabled": false,
+        "info": "Lectura y escritura de variables del PLC Schneider vía Modbus TCP.\nReads sensors, vision, process status and controls actuators."
+    },
+    {
+        "id": "flow_dashboard",
+        "type": "tab",
+        "label": "2. Dashboard & Commands",
+        "disabled": false,
+        "info": "Dashboard web y controles de mando remoto"
+    },
+    {
+        "id": "flow_alertas",
+        "type": "tab",
+        "label": "3. Telegram Alerts",
+        "disabled": false,
+        "info": "Monitoreo de umbrales y envío de alertas por Telegram"
+    },
+    {
+        "id": "flow_datos",
+        "type": "tab",
+        "label": "4. Logging & Reports",
+        "disabled": false,
+        "info": "Registro de datos en CSV y generación de informes"
+    },
+    {
+        "id": "flow_vision",
+        "type": "tab",
+        "label": "5. AI Vision",
+        "disabled": false,
+        "info": "Integración con detector de colores Python vía MQTT"
+    },
+    {
+        "id": "cfg_modbus",
+        "type": "modbus-client",
+        "name": "PLC Schneider M221",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "127.0.0.1",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialType": "RTU-BUFFERED",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": "1",
+        "commandDelay": "1",
+        "clientTimeout": "1000",
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": "2000",
+        "parallelUnitIdsAllowed": true
+    },
+    {
+        "id": "cfg_mqtt",
+        "type": "mqtt-broker",
+        "name": "Mosquitto Local",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "nodered_iiot_planta",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true
+    },
+    {
+        "id": "cfg_telegram",
+        "type": "telegram bot",
+        "botname": "PlantaIIoT_Bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "ui_tab_main",
+        "type": "ui_tab",
+        "name": "🏭 Main Panel",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_tab_vision",
+        "type": "ui_tab",
+        "name": "📷 AI Vision",
+        "icon": "camera_alt",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_tab_history",
+        "type": "ui_tab",
+        "name": "📊 History",
+        "icon": "timeline",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ui_grp_estado",
+        "type": "ui_group",
+        "name": "System Status",
+        "tab": "ui_tab_main",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_mando",
+        "type": "ui_group",
+        "name": "Control Panel",
+        "tab": "ui_tab_main",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_sensores",
+        "type": "ui_group",
+        "name": "Factory IO Panel",
+        "tab": "ui_tab_main",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_contadores",
+        "type": "ui_group",
+        "name": "Part Counters",
+        "tab": "ui_tab_main",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_vision_sensor",
+        "type": "ui_group",
+        "name": "FIO Vision Sensor",
+        "tab": "ui_tab_main",
+        "order": 5,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_camara",
+        "type": "ui_group",
+        "name": "Live Camera",
+        "tab": "ui_tab_vision",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_deteccion",
+        "type": "ui_group",
+        "name": "Detection Results",
+        "tab": "ui_tab_vision",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_vision_ctrl",
+        "type": "ui_group",
+        "name": "Vision Control",
+        "tab": "ui_tab_vision",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_tendencias",
+        "type": "ui_group",
+        "name": "Real-Time Trends",
+        "tab": "ui_tab_history",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "ui_grp_informes",
+        "type": "ui_group",
+        "name": "Report Generation",
+        "tab": "ui_tab_history",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "css_theme",
+        "type": "ui_template",
+        "z": "flow_dashboard",
+        "group": "ui_grp_estado",
+        "name": "🎨 Dark Industrial Theme",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n/* ═══ TEMA INDUSTRIAL OSCURO PREMIUM v2 ═══ */\n\n/* --- Page background --- */\n.nr-dashboard-theme ui-view,\n.nr-dashboard-theme .nr-dashboard-layout,\n#nr-dashboard-main {\n  background: linear-gradient(160deg, #0a0e27 0%, #0d1b2a 40%, #1b2838 100%) !important;\n}\n\n/* --- Navigation bar --- */\n.nr-dashboard-theme .nr-dashboard-toolbar {\n  background: linear-gradient(90deg, #0d1b2a 0%, #162a4a 100%) !important;\n  border-bottom: 2px solid #00d2ff44 !important;\n  box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important;\n}\n\n/* --- Cards (groups) --- */\nmd-card {\n  background: linear-gradient(145deg, #16213e, #1a2744) !important;\n  color: #e8ecf1 !important;\n  border-radius: 14px !important;\n  border: 1px solid rgba(0, 210, 255, 0.12) !important;\n  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03) !important;\n  overflow: hidden !important;\n  transition: box-shadow 0.3s ease, border-color 0.3s ease !important;\n}\nmd-card:hover {\n  border-color: rgba(0, 210, 255, 0.25) !important;\n  box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05) !important;\n}\n\n/* --- Card titles --- */\n.nr-dashboard-theme .nr-dashboard-cardtitle {\n  color: #00d2ff !important;\n  font-weight: 700 !important;\n  text-transform: uppercase !important;\n  letter-spacing: 1.5px !important;\n  font-size: 12px !important;\n  border-bottom: 1px solid rgba(0, 210, 255, 0.15) !important;\n  padding-bottom: 10px !important;\n  margin-bottom: 8px !important;\n  background: linear-gradient(90deg, rgba(0,210,255,0.06), transparent) !important;\n  padding-left: 12px !important;\n}\n\n/* --- Global text visibility fix --- */\nbody, .nr-dashboard-theme,\n.nr-dashboard-theme p,\n.nr-dashboard-theme span,\n.nr-dashboard-theme div,\n.nr-dashboard-theme label,\n.nr-dashboard-theme .md-label,\n.nr-dashboard-theme md-input-container label {\n  color: #e8ecf1 !important;\n}\n\n/* --- SVG text (gauges, charts axes) --- */\n.nr-dashboard-theme text,\n.nr-dashboard-theme .nv-axis text,\n.nr-dashboard-theme .nv-axislabel,\n.nr-dashboard-theme .nv-legend text,\n.nr-dashboard-theme .nv-pieLabels text {\n  fill: #c8d0da !important;\n}\n\n/* --- ui_text values & labels --- */\n.nr-dashboard-theme .nr-dashboard-widget .ui-text-value {\n  color: #ffffff !important;\n  font-weight: 600 !important;\n  font-size: 15px !important;\n}\n.nr-dashboard-theme .nr-dashboard-widget .ui-text-label {\n  color: #8dabc4 !important;\n  font-weight: 500 !important;\n  font-size: 13px !important;\n}\n\n/* --- Buttons --- */\n.nr-dashboard-theme md-button {\n  border-radius: 10px !important;\n  font-weight: 700 !important;\n  letter-spacing: 0.5px !important;\n  transition: all 0.3s cubic-bezier(0.4,0,0.2,1) !important;\n  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;\n  text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;\n}\n.nr-dashboard-theme md-button:hover {\n  transform: translateY(-2px) !important;\n  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;\n  filter: brightness(1.1) !important;\n}\n.nr-dashboard-theme md-button:active {\n  transform: translateY(0px) !important;\n}\n\n/* --- Switch toggle --- */\n.nr-dashboard-theme md-switch .md-bar {\n  background-color: #384a6a !important;\n}\n.nr-dashboard-theme md-switch.md-checked .md-bar {\n  background-color: #00d2ff88 !important;\n}\n.nr-dashboard-theme md-switch.md-checked .md-thumb {\n  background-color: #00d2ff !important;\n}\n\n/* --- Slider --- */\n.nr-dashboard-theme md-slider .md-track-fill { background-color: #00d2ff !important; }\n.nr-dashboard-theme md-slider .md-thumb { background-color: #00d2ff !important; }\n\n\n/* --- Chart area --- */\n.nr-dashboard-theme .nr-dashboard-widget canvas {\n  border-radius: 8px !important;\n}\n.nr-dashboard-theme .nv-area { opacity: 0.25 !important; }\n\n/* --- md-list items --- */\n.nr-dashboard-theme md-list-item,\n.nr-dashboard-theme md-list-item .md-list-item-text p,\n.nr-dashboard-theme md-list-item .md-list-item-text h3,\n.nr-dashboard-theme md-list-item span {\n  color: #e8ecf1 !important;\n}\n\n/* --- Sidebar navigation --- */\n.nr-dashboard-theme .nr-dashboard-sidebar,\n.nr-dashboard-theme md-sidenav {\n  background: linear-gradient(180deg, #0d1b2a, #16213e) !important;\n}\n.nr-dashboard-theme md-sidenav md-list-item {\n  border-bottom: 1px solid rgba(0,210,255,0.08) !important;\n}\n.nr-dashboard-theme md-sidenav md-list-item:hover {\n  background: rgba(0,210,255,0.08) !important;\n}\n\n/* --- Scrollbar --- */\n.nr-dashboard-theme ::-webkit-scrollbar { width: 6px; }\n.nr-dashboard-theme ::-webkit-scrollbar-track { background: #0d1b2a; }\n.nr-dashboard-theme ::-webkit-scrollbar-thumb { background: #00d2ff44; border-radius: 3px; }\n.nr-dashboard-theme ::-webkit-scrollbar-thumb:hover { background: #00d2ff88; }\n\n/* --- Animations --- */\n@keyframes pulse-alert {\n  0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5); }\n  70% { box-shadow: 0 0 0 15px rgba(255, 0, 0, 0); }\n  100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }\n}\n@keyframes blink-green {\n  0%,100% { opacity: 1; }\n  50% { opacity: 0.3; }\n}\n@keyframes glow-cyan {\n  0%,100% { box-shadow: 0 0 5px #00d2ff33; }\n  50% { box-shadow: 0 0 20px #00d2ff55; }\n}\n\n/* --- Chart light background (para legibilidad) --- */\n.chart-light-bg,\n.chart-light-bg canvas {\n  background: transparent !important;\n}\n\n/* Target the card containing the chart-light-bg class */\nmd-card:has(.chart-light-bg) {\n  background: linear-gradient(145deg, #e8eef5, #f0f4fa) !important;\n  border: 1px solid rgba(0, 120, 200, 0.15) !important;\n  box-shadow: 0 8px 32px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;\n}\n\n/* Fallback: also target via parent widget selector */\n.nr-dashboard-widget.chart-light-bg {\n  background: transparent !important;\n}\n\n/* The chart title on light background */\nmd-card:has(.chart-light-bg) .nr-dashboard-cardtitle {\n  color: #1a3556 !important;\n  background: linear-gradient(90deg, rgba(0,120,200,0.08), transparent) !important;\n  border-bottom: 1px solid rgba(0,120,200,0.15) !important;\n}\n\n\n            \n/* Forzar que CUALQUIER texto del título del widget con fondo claro sea muy oscuro */\n.nr-dashboard-theme .chart-light-bg .nr-dashboard-cardtitle,\n.nr-dashboard-theme md-card:has(.chart-light-bg) .nr-dashboard-cardtitle,\n.nr-dashboard-widget.chart-light-bg .title,\n.nr-dashboard-theme .nv-chart .nv-title {\n    color: #1e293b !important;\n    font-weight: 800 !important;\n    text-shadow: none !important;\n}\n</style>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 160,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "comment_plc",
+        "type": "comment",
+        "z": "flow_plc",
+        "name": "═══ PLC VARIABLE READING — SORTING STATION ═══",
+        "info": "Mapeo real de Factory IO Sorting Station:\n\nSENSORES (Coils 0-6):\n  %M0=At exit, %M1=Start, %M2=Reset,\n  %M3=Stop, %M4=Emergency, %M5=Auto, %M6=FIO Running\n\nVISION (Holding Reg 0):\n  %MW0=Vision sensor (0=nada,1=azul,2=verde,3=metal)\n\nACTUADORES (Inputs 10-21):\n  %M10=Entry conv, %M11=Stop blade, %M12=Exit conv,\n  %M13-14=Sort1, %M15-16=Sort2, %M17-18=Sort3,\n  %M19=Start light, %M20=Reset light, %M21=Stop light\n\nREGISTROS PROCESO (%MW20-25):\n  %MW20=Estado, %MW21=Total, %MW22=Blue,\n  %MW23=Green, %MW24=Metal, %MW25=Velocidad\n\nREMOTE COMMANDS (Node-RED → PLC):\n  %M30=Start, %M31=Stop, %M32=Pause, %M33=Reset, %M34=Emergency\n  %MW30=Setpoint velocidad",
+        "x": 310,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "mb_read_sensors",
+        "type": "modbus-read",
+        "z": "flow_plc",
+        "name": "Read Sensors (Coils %M0-%M6)",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "unitid": "1",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "7",
+        "rate": "500",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "cfg_modbus",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "func_parse_sensors"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "func_parse_sensors",
+        "type": "function",
+        "z": "flow_plc",
+        "name": "Parse Sensors (7 Coils)",
+        "func": "// ═══════════════════════════════════════════════\n// Mapeo REAL de Factory IO Sorting Station\n// Coils 0-6 escritos por Factory IO al PLC\n// ═══════════════════════════════════════════════\nvar data = msg.payload;\n\nvar sensors = {\n    atExit:        data[0] || false,   // Coil 0 = %M0 - Sensor At Exit\n    startBtn:      data[1] || false,   // Coil 1 = %M1 - Start button (panel FIO)\n    resetBtn:      data[2] || false,   // Coil 2 = %M2 - Reset button (panel FIO)\n    stopBtn:       data[3] || false,   // Coil 3 = %M3 - Stop button (panel FIO)\n    emergencyStop: data[4] || false,   // Coil 4 = %M4 - Emergency stop (seta)\n    autoMode:      data[5] || false,   // Coil 5 = %M5 - Auto mode switch\n    fioRunning:    data[6] || false    // Coil 6 = %M6 - Factory IO running\n};\n\n// Guardar en contexto de flujo\nflow.set(\"sensors\", sensors);\n\n// Crear mensajes para cada LED del dashboard\nvar msgExit  = { payload: sensors.atExit };\nvar msgStart = { payload: sensors.startBtn };\nvar msgReset = { payload: sensors.resetBtn };\nvar msgStop  = { payload: sensors.stopBtn };\nvar msgEmg   = { payload: sensors.emergencyStop };\nvar msgAuto  = { payload: sensors.autoMode };\nvar msgFIO   = { payload: sensors.fioRunning };\n\nreturn [msgExit, msgStart, msgReset, msgStop, msgEmg, msgAuto, msgFIO];",
+        "outputs": 7,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 140,
+        "wires": [
+            [
+                "led_exit"
+            ],
+            [
+                "led_start_btn"
+            ],
+            [
+                "led_reset_btn"
+            ],
+            [
+                "led_stop_btn"
+            ],
+            [
+                "led_emergency"
+            ],
+            [
+                "led_auto"
+            ],
+            [
+                "led_fio_running"
+            ]
+        ]
+    },
+    {
+        "id": "mb_read_vision",
+        "type": "modbus-read",
+        "z": "flow_plc",
+        "name": "Read Vision Sensor (%MW0)",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "unitid": "1",
+        "dataType": "HoldingRegister",
+        "adr": "0",
+        "quantity": "1",
+        "rate": "500",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "cfg_modbus",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 220,
+        "y": 260,
+        "wires": [
+            [
+                "func_parse_vision_sensor"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "func_parse_vision_sensor",
+        "type": "function",
+        "z": "flow_plc",
+        "name": "Parse FIO Vision Sensor",
+        "func": "// ═══════════════════════════════════════════════\n// Vision Sensor de Factory IO (Holding Register 0 = %MW0)\n// Valores reales FIO: 0=nada, 1=azul, 4=verde, 7=metal\n// ═══════════════════════════════════════════════\nvar value = msg.payload[0] || 0;\n\nflow.set(\"visionSensor\", value);\n\nvar colorMap = {\n    0: { label: \"⚫ Sin pieza\",  color: \"#555\" },\n    1: { label: \"🔵 AZUL\",      color: \"#2196f3\" },\n    4: { label: \"🟢 VERDE\",     color: \"#4caf50\" },\n    7: { label: \"⚪ METÁLICO\",  color: \"#9e9e9e\" }\n};\n\nvar info = colorMap[value] || colorMap[0];\n\nvar msgText = { payload: info.label, color: info.color };\nreturn msgText;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 260,
+        "wires": [
+            [
+                "tmpl_vision_fio"
+            ]
+        ]
+    },
+    {
+        "id": "tmpl_vision_fio",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_vision_sensor",
+        "name": "FIO Vision Sensor",
+        "order": 1,
+        "width": 12,
+        "height": 3,
+        "format": "<div style=\"\n  display:flex; align-items:center; justify-content:center; gap:20px;\n  padding:15px 30px; border-radius:14px; height:100%; box-sizing:border-box;\n  background: linear-gradient(135deg, {{msg.color}}15, {{msg.color}}05);\n  border: 2px solid {{msg.color}}66;\n  box-shadow: 0 0 20px {{msg.color}}18;\n  transition: all 0.4s ease;\n\">\n  <div style=\"\n    width:18px;height:18px;border-radius:50%;\n    background:{{msg.color}};\n    box-shadow:0 0 12px {{msg.color}}88;\n    animation: glow-cyan 2s ease-in-out infinite;\n  \"></div>\n  <div style=\"text-align:center\">\n    <div style=\"font-size:11px;color:#8dabc4;text-transform:uppercase;letter-spacing:2px;margin-bottom:4px\">Vision Sensor Factory IO</div>\n    <div style=\"font-size:26px;font-weight:800;color:{{msg.color}};text-shadow:0 0 12px {{msg.color}}44;letter-spacing:1px\">{{msg.payload}}</div>\n  </div>\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 780,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "mb_read_process",
+        "type": "modbus-read",
+        "z": "flow_plc",
+        "name": "Read Process Status (%MW20-%MW25)",
+        "topic": "",
+        "showStatusActivities": true,
+        "logIOActivities": false,
+        "showErrors": true,
+        "unitid": "1",
+        "dataType": "HoldingRegister",
+        "adr": "20",
+        "quantity": "6",
+        "rate": "500",
+        "rateUnit": "ms",
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "server": "cfg_modbus",
+        "useIOFile": false,
+        "ioFile": "",
+        "useIOForPayload": false,
+        "emptyMsgOnFail": false,
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "func_parse_process"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "func_parse_process",
+        "type": "function",
+        "z": "flow_plc",
+        "name": "Parse Process Status",
+        "func": "// ═══════════════════════════════════════════════\n// Registros de proceso del PLC (%MW20-%MW25)\n// Estos registros los escribe el programa Ladder\n// ═══════════════════════════════════════════════\nvar data = msg.payload;\n\nvar process = {\n    systemState:   data[0] || 0,\n    totalCount:    data[1] || 0,\n    blueCount:     data[2] || 0,\n    greenCount:    data[3] || 0,\n    metalCount:    data[4] || 0\n};\n\n// Guardar en contexto\nflow.set(\"process\", process);\nglobal.set(\"processData\", process);\n\n// Estado del sistema con colores\nvar stateNames = [\"⛔ PARADO\", \"✅ EN MARCHA\", \"⏸️ PAUSEDO\", \"🚨 EMERGENCY\"];\nvar stateColors = [\"#ff5722\", \"#4caf50\", \"#ff9800\", \"#f44336\"];\nvar idx = Math.min(process.systemState, 3);\n\nvar msgState  = { payload: stateNames[idx], color: stateColors[idx] };\nvar msgTotal  = { payload: process.totalCount };\nvar msgBlue   = { payload: process.blueCount };\nvar msgGreen  = { payload: process.greenCount };\nvar msgMetal  = { payload: process.metalCount };\n\n// Para gráfico de tendencias (Node-RED ui_chart) - SIN VELOCIDAD\nvar msgChartTotal = { topic: \"Total Parts\", payload: process.totalCount };\n\n// Para alarmas y logging\nvar msgAlarm = {\n    payload: process,\n    state: stateNames[idx]\n};\n\n// output 6 era velocidad, ahora enviamos null o msg vacio\nreturn [msgState, msgTotal, msgBlue, msgGreen, msgMetal, null, msgChartTotal, msgAlarm];\n",
+        "outputs": 8,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 380,
+        "wires": [
+            [
+                "tmpl_estado_badge"
+            ],
+            [
+                "txt_total"
+            ],
+            [
+                "txt_blue"
+            ],
+            [
+                "txt_green"
+            ],
+            [
+                "txt_metal"
+            ],
+            [
+                "gauge_speed"
+            ],
+            [
+                "chart_tendencias"
+            ],
+            [
+                "func_check_alarm",
+                "func_log_data"
+            ]
+        ]
+    },
+    {
+        "id": "tmpl_estado_badge",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_estado",
+        "name": "Visual Status Badge",
+        "order": 1,
+        "width": 6,
+        "height": 2,
+        "format": "<div style=\"\n  display:flex; align-items:center; justify-content:center;\n  padding:18px; border-radius:14px; height:100%; box-sizing:border-box;\n  background: linear-gradient(135deg, {{msg.color}}20, {{msg.color}}08);\n  border: 2px solid {{msg.color}}99;\n  box-shadow: 0 0 25px {{msg.color}}22, inset 0 0 20px {{msg.color}}08;\n  transition: all 0.5s ease;\n\">\n  <span style=\"\n    font-size:30px; font-weight:800;\n    color:{{msg.color}};\n    text-shadow: 0 0 15px {{msg.color}}44;\n    letter-spacing: 2px;\n  \">{{msg.payload}}</span>\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 830,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "txt_total",
+        "type": "ui_text",
+        "z": "flow_plc",
+        "group": "ui_grp_contadores",
+        "order": 1,
+        "width": 6,
+        "height": 2,
+        "name": "Total Parts",
+        "label": "🔢 Total",
+        "format": "<div style=\"font-size:28px; font-weight:bold; color:#ffffff; text-shadow:0 0 10px rgba(255,255,255,0.4); text-align:right; margin-top:5px;\">{{msg.payload}}</div>",
+        "layout": "row-spread",
+        "className": "",
+        "x": 800,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "txt_blue",
+        "type": "ui_text",
+        "z": "flow_plc",
+        "group": "ui_grp_contadores",
+        "order": 2,
+        "width": 2,
+        "height": 2,
+        "name": "Blue",
+        "label": "🔵",
+        "format": "<div style=\"font-size:28px; font-weight:bold; color:#ffffff; text-shadow:0 0 10px rgba(255,255,255,0.4); text-align:right; margin-top:5px;\">{{msg.payload}}</div>",
+        "layout": "row-spread",
+        "className": "",
+        "x": 790,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "txt_green",
+        "type": "ui_text",
+        "z": "flow_plc",
+        "group": "ui_grp_contadores",
+        "order": 3,
+        "width": 2,
+        "height": 2,
+        "name": "Green",
+        "label": "🟢",
+        "format": "<div style=\"font-size:28px; font-weight:bold; color:#ffffff; text-shadow:0 0 10px rgba(255,255,255,0.4); text-align:right; margin-top:5px;\">{{msg.payload}}</div>",
+        "layout": "row-spread",
+        "className": "",
+        "x": 790,
+        "y": 430,
+        "wires": []
+    },
+    {
+        "id": "txt_metal",
+        "type": "ui_text",
+        "z": "flow_plc",
+        "group": "ui_grp_contadores",
+        "order": 4,
+        "width": 2,
+        "height": 2,
+        "name": "Metallic",
+        "label": "⚪",
+        "format": "<div style=\"font-size:28px; font-weight:bold; color:#ffffff; text-shadow:0 0 10px rgba(255,255,255,0.4); text-align:right; margin-top:5px;\">{{msg.payload}}</div>",
+        "layout": "row-spread",
+        "className": "",
+        "x": 790,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "led_exit",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED At Exit",
+        "order": 1,
+        "width": 3,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#4caf50' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 10px #4caf5088' : 'none'}};transition:all 0.3s ease;flex-shrink:0\"></div>\n  <span style=\"color:#c8d0da;font-size:13px;font-weight:500\">At Exit</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 790,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "led_start_btn",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED Start Btn",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#4caf50' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 10px #4caf5088' : 'none'}};transition:all 0.3s ease;flex-shrink:0\"></div>\n  <span style=\"color:#c8d0da;font-size:13px;font-weight:500\">Start</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 800,
+        "y": 110,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "led_reset_btn",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED Reset Btn",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#2196f3' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 10px #2196f388' : 'none'}};transition:all 0.3s ease;flex-shrink:0\"></div>\n  <span style=\"color:#c8d0da;font-size:13px;font-weight:500\">Reset</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 800,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "led_stop_btn",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED Stop Btn",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#f44336' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 10px #f4433688' : 'none'}};transition:all 0.3s ease;flex-shrink:0\"></div>\n  <span style=\"color:#c8d0da;font-size:13px;font-weight:500\">Stop</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 800,
+        "y": 170,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "led_emergency",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED Emergency",
+        "order": 7,
+        "width": 6,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#f44336' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 12px #f44336aa' : 'none'}};animation:{{msg.payload ? 'pulse-alert 1.5s infinite' : 'none'}};transition:all 0.3s;flex-shrink:0\"></div>\n  <span style=\"color:{{msg.payload ? '#ff6b6b' : '#c8d0da'}};font-size:13px;font-weight:{{msg.payload ? '700' : '500'}}\">Emergency Stop</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 810,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "led_auto",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED Auto Mode",
+        "order": 6,
+        "width": 3,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#00bcd4' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 10px #00bcd488' : 'none'}};transition:all 0.3s ease;flex-shrink:0\"></div>\n  <span style=\"color:#c8d0da;font-size:13px;font-weight:500\">Auto</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 800,
+        "y": 230,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "led_fio_running",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_sensores",
+        "name": "LED FIO Running",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "format": "<div style=\"display:flex;align-items:center;gap:10px;padding:4px 0\">\n  <div style=\"width:14px;height:14px;border-radius:50%;background:{{msg.payload ? '#2196f3' : '#2a3550'}};box-shadow:{{msg.payload ? '0 0 10px #2196f388' : 'none'}};transition:all 0.3s ease;flex-shrink:0\"></div>\n  <span style=\"color:#c8d0da;font-size:13px;font-weight:500\">Factory IO</span>\n</div>\n",
+        "storeOutMessages": false,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 810,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "tmpl_info_header",
+        "type": "ui_template",
+        "z": "flow_dashboard",
+        "group": "ui_grp_estado",
+        "name": "Project Header",
+        "order": 0,
+        "width": 6,
+        "height": 2,
+        "format": "<div style=\"\n  text-align:center; padding:4px;\n  background: linear-gradient(135deg, #0d1b2a 0%, #162a4a 50%, #1a3556 100%);\n  border-radius:14px; height:100%; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center;\n  border: 1px solid rgba(0,210,255,0.15);\n  box-shadow: inset 0 0 30px rgba(0,210,255,0.03);\n\">\n  <div style=\"font-size:15px;color:#00d2ff;font-weight:800;letter-spacing:2px;text-shadow:0 0 15px #00d2ff44\">🏭 SORTING STATION</div>\n  <div style=\"font-size:9px;color:#8dabc4;margin-top:4px;letter-spacing:0px;line-height:1.2;\">IIoT Sorting Station</div>\n  <div style=\"font-size:9px;color:#5a7a9a;margin-top:2px;line-height:1.2;\">Node-RED + Factory IO + Schneider M221</div>\n</div>",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 170,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "btn_start",
+        "type": "ui_button",
+        "z": "flow_dashboard",
+        "group": "ui_grp_mando",
+        "order": 1,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "START",
+        "tooltip": "Start the system",
+        "color": "#FFFFFF",
+        "bgcolor": "#4CAF50",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "num",
+        "topic": "cmd/start",
+        "topicType": "str",
+        "x": 160,
+        "y": 100,
+        "wires": [
+            [
+                "func_cmd_start"
+            ]
+        ]
+    },
+    {
+        "id": "btn_stop",
+        "type": "ui_button",
+        "z": "flow_dashboard",
+        "group": "ui_grp_mando",
+        "order": 5,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "EMERGENCY",
+        "tooltip": "Emergency stop",
+        "color": "#FFFFFF",
+        "bgcolor": "#F44336",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "num",
+        "topic": "cmd/emergency",
+        "topicType": "str",
+        "x": 170,
+        "y": 160,
+        "wires": [
+            [
+                "func_cmd_emergency"
+            ]
+        ]
+    },
+    {
+        "id": "btn_pause",
+        "type": "ui_button",
+        "z": "flow_dashboard",
+        "group": "ui_grp_mando",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "PAUSE",
+        "tooltip": "Pausedr el sistema",
+        "color": "#FFFFFF",
+        "bgcolor": "#FF9800",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "num",
+        "topic": "cmd/pause",
+        "topicType": "str",
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "func_cmd_pause"
+            ]
+        ]
+    },
+    {
+        "id": "btn_reset",
+        "type": "ui_button",
+        "z": "flow_dashboard",
+        "group": "ui_grp_mando",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "RESET",
+        "tooltip": "Reiniciar el sistema",
+        "color": "#FFFFFF",
+        "bgcolor": "#2196F3",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "num",
+        "topic": "cmd/reset",
+        "topicType": "str",
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "func_cmd_reset"
+            ]
+        ]
+    },
+    {
+        "id": "func_cmd_start",
+        "type": "function",
+        "z": "flow_dashboard",
+        "name": "CMD → Start (%M30)",
+        "func": "// Pulso de START: true → 500ms → false\nvar addr = 30;\nvar msgOn = { payload: { value: true, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nvar msgOff = { payload: { value: false, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nnode.send(msgOn);\nsetTimeout(function() { node.send(msgOff); }, 500);\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 410,
+        "y": 100,
+        "wires": [
+            [
+                "mb_write_cmd"
+            ]
+        ]
+    },
+    {
+        "id": "func_cmd_emergency",
+        "type": "function",
+        "z": "flow_dashboard",
+        "name": "CMD → Emergency (%M34)",
+        "func": "// Pulso de EMERGENCY: true → 500ms → false\nvar addr = 34;\nvar msgOn = { payload: { value: true, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nvar msgOff = { payload: { value: false, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nnode.send(msgOn);\nsetTimeout(function() { node.send(msgOff); }, 500);\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 420,
+        "y": 160,
+        "wires": [
+            [
+                "mb_write_cmd"
+            ]
+        ]
+    },
+    {
+        "id": "func_cmd_pause",
+        "type": "function",
+        "z": "flow_dashboard",
+        "name": "CMD → Pause (%M32)",
+        "func": "// Pulso de PAUSE: true → 500ms → false\nvar addr = 32;\nvar msgOn = { payload: { value: true, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nvar msgOff = { payload: { value: false, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nnode.send(msgOn);\nsetTimeout(function() { node.send(msgOff); }, 500);\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 400,
+        "y": 220,
+        "wires": [
+            [
+                "mb_write_cmd"
+            ]
+        ]
+    },
+    {
+        "id": "func_cmd_reset",
+        "type": "function",
+        "z": "flow_dashboard",
+        "name": "CMD → Reset (%M33)",
+        "func": "// Pulso de RESET: true → 500ms → false\nvar addr = 33;\nvar msgOn = { payload: { value: true, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nvar msgOff = { payload: { value: false, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nnode.send(msgOn);\nsetTimeout(function() { node.send(msgOff); }, 500);\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 400,
+        "y": 280,
+        "wires": [
+            [
+                "mb_write_cmd"
+            ]
+        ]
+    },
+    {
+        "id": "mb_write_cmd",
+        "type": "modbus-flex-write",
+        "z": "flow_dashboard",
+        "name": "Write PLC Command",
+        "showStatusActivities": true,
+        "showErrors": true,
+        "showWarnings": true,
+        "server": "cfg_modbus",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 650,
+        "y": 200,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "func_reset_cmd",
+        "type": "function",
+        "z": "flow_dashboard",
+        "name": "Reset Pulse (500ms)",
+        "func": "// Después de enviar un comando de tipo Coil, resetearlo a false\n// para que funcione como pulso momentáneo\nvar addr = msg.payload.address;\nvar fc = msg.payload.fc;\n\nif (fc === 5 && addr >= 30 && addr <= 34) {\n    setTimeout(function() {\n        node.send({\n            payload: { value: false, fc: 5, unitid: 1, address: addr }\n        });\n    }, 500);\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 870,
+        "y": 200,
+        "wires": [
+            [
+                "mb_write_cmd"
+            ]
+        ]
+    },
+    {
+        "id": "comment_cmd",
+        "type": "comment",
+        "z": "flow_dashboard",
+        "name": "═══ REMOTE COMMANDS → PLC (Coils %M30-%M34, Reg %MW30) ═══",
+        "info": "Botones del dashboard escriben comandos como pulsos:\n%M30=Start, %M31=Stop, %M32=Pause, %M33=Reset, %M34=Emergency\n%MW30=Setpoint de velocidad (0-100%)",
+        "x": 330,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "func_check_alarm",
+        "type": "function",
+        "z": "flow_alertas",
+        "name": "Check Alarm Thresholds",
+        "func": "// Leer datos directamente del contexto global\nvar proc = global.get(\"processData\");\nif (!proc) { return null; }\n\nvar alarms = [];\n\n// ── REPORTE CADA 50 PIEZAS ──\nvar lastReported = global.get(\"lastReportedTotal\") || 0;\nvar currentTotal = proc.totalCount || 0;\n\nif (currentTotal >= 50 && Math.floor(currentTotal / 50) > Math.floor(lastReported / 50)) {\n    global.set(\"lastReportedTotal\", currentTotal);\n    alarms.push({\n        tipo: \"reporte\",\n        totalCount: currentTotal,\n        blueCount: proc.blueCount || 0,\n        greenCount: proc.greenCount || 0,\n        metalCount: proc.metalCount || 0\n    });\n}\n\n// ── DETECCIÓN DE EMERGENCY ──\nvar lastState = global.get(\"tg_lastSystemState\");\nif (lastState === undefined || lastState === null) { lastState = -1; }\nvar currentState = proc.systemState;\n\n// El PLC puede mandar >= 3 para emergencia (el Dashboard usa Math.min(val, 3))\nvar esEmergencyAhora = (currentState >= 3);\nvar eraEmergencyAntes = (lastState >= 3);\n\n// Detectar ENTRADA en emergencia\nif (esEmergencyAhora && !eraEmergencyAntes) {\n    alarms.push({\n        tipo: \"emergencia\",\n        variable: \"System Status\",\n        valor: \"EMERGENCY ACTIVA\",\n        icono: \"🚨\",\n        accion: \"Emergency stop pulsada! Revisar planta.\"\n    });\n}\n// Detectar SALIDA de emergencia\nelse if (eraEmergencyAntes && !esEmergencyAhora) {\n    alarms.push({\n        tipo: \"emergencia\",\n        variable: \"System Status\",\n        valor: \"EMERGENCY RESTABLECIDA\",\n        icono: \"✅\",\n        accion: \"El sistema ha salido del estado de emergencia.\"\n    });\n}\n\nglobal.set(\"tg_lastSystemState\", currentState);\n\nif (alarms.length > 0) {\n    msg.alarms = alarms;\n    return msg;\n}\nreturn null;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 230,
+        "y": 140,
+        "wires": [
+            [
+                "delay_antiflooding"
+            ]
+        ]
+    },
+    {
+        "id": "delay_antiflooding",
+        "type": "delay",
+        "z": "flow_alertas",
+        "name": "Anti-flooding (1 per 20s)",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "20",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 140,
+        "wires": [
+            [
+                "func_format_telegram"
+            ]
+        ]
+    },
+    {
+        "id": "func_format_telegram",
+        "type": "function",
+        "z": "flow_alertas",
+        "name": "Format Telegram Message",
+        "func": "// ════════════════════════════════════════════\n// CONFIGURACIÓN: Poner aquí tu Chat ID de Telegram\nvar CHAT_ID = 8570340047;  // ← CAMBIAR POR TU CHAT ID\n// ════════════════════════════════════════════\n\nvar alarms = msg.alarms;\nvar now = new Date();\nvar timestamp = now.toLocaleString('es-CO', {\n    timeZone: 'America/Bogota',\n    year: 'numeric', month: '2-digit', day: '2-digit',\n    hour: '2-digit', minute: '2-digit', second: '2-digit'\n});\n\nvar text = \"\";\n\nfor (var i = 0; i < alarms.length; i++) {\n    var a = alarms[i];\n    \n    if (a.tipo === \"reporte\") {\n        text += \"📊 *REPORTE DE PRODUCCIÓN*\\n\";\n        text += \"━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n        text += \"📦 *Total de piezas:* `\" + a.totalCount + \"`\\n\\n\";\n        text += \"🔵 Blue: `\" + a.blueCount + \"`\\n\";\n        text += \"🟢 Green: `\" + a.greenCount + \"`\\n\";\n        text += \"⚙️ Metallic: `\" + a.metalCount + \"`\\n\\n\";\n    } else if (a.tipo === \"emergencia\") {\n        text += \"🚨 *ALERTA CRÍTICA*\\n\";\n        text += \"━━━━━━━━━━━━━━━━━━━━\\n\\n\";\n        text += a.icono + \" *\" + a.variable + \"*\\n\";\n        text += \"   📈 Valor: `\" + a.valor + \"`\\n\";\n        text += \"   💡 \" + a.accion + \"\\n\\n\";\n    }\n}\n\ntext += \"━━━━━━━━━━━━━━━━━━━━\\n\";\ntext += \"🕐 \" + timestamp + \"\\n\";\ntext += \"🏭 Sorting Station — Redes Com. Industrial\";\n\nmsg.payload = {\n    chatId: CHAT_ID,\n    type: \"message\",\n    content: text,\n    options: { parse_mode: \"Markdown\" }\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 750,
+        "y": 140,
+        "wires": [
+            [
+                "tg_sender"
+            ]
+        ]
+    },
+    {
+        "id": "tg_sender",
+        "type": "telegram sender",
+        "z": "flow_alertas",
+        "name": "📨 Send to Telegram",
+        "bot": "cfg_telegram",
+        "haserroroutput": true,
+        "outputs": 2,
+        "x": 990,
+        "y": 140,
+        "wires": [
+            [
+                "debug_tg_ok"
+            ],
+            [
+                "debug_tg_err"
+            ]
+        ]
+    },
+    {
+        "id": "debug_tg_ok",
+        "type": "debug",
+        "z": "flow_alertas",
+        "name": "TG OK",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "Alerta enviada ✅",
+        "statusType": "auto",
+        "x": 1180,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "debug_tg_err",
+        "type": "debug",
+        "z": "flow_alertas",
+        "name": "TG Error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "Error ❌",
+        "statusType": "auto",
+        "x": 1180,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "tg_test_inject",
+        "type": "inject",
+        "z": "flow_alertas",
+        "name": "🧪 Manual Alert Test",
+        "props": [
+            {
+                "p": "alarms",
+                "v": "[{\"variable\":\"PRUEBA\",\"valor\":\"Test Manual\",\"umbral\":\"N/A\",\"icono\":\"🧪\",\"accion\":\"Esto es una prueba del sistema de alertas\"}]",
+                "vt": "json"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 60,
+        "wires": [
+            [
+                "func_format_telegram"
+            ]
+        ]
+    },
+    {
+        "id": "comment_alerts",
+        "type": "comment",
+        "z": "flow_alertas",
+        "name": "═══ TELEGRAM ALERTS ═══",
+        "info": "Monitorea variables del proceso y envía alertas por Telegram.\nUmbrales: Velocidad>90%, Total>50 piezas, Estado emergencia.\nAnti-flooding: máximo 1 alerta por minuto.",
+        "x": 200,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "func_log_data",
+        "type": "function",
+        "z": "flow_plc",
+        "name": "Format CSV Line",
+        "func": "// Registrar datos del proceso en CSV (Compatible con Excel Español)\nvar proc = msg.payload;\nif (!proc || typeof proc !== 'object' || proc.systemState === undefined) {\n    return null;\n}\nvar sensors = flow.get('sensors') || {};\nvar vision = flow.get('visionSensor') || 0;\nvar now = new Date();\n\n// Nombre del estado legible\nvar stateNames = [\"Parado\", \"Running\", \"Pauseddo\", \"Emergency\"];\nvar stateIdx = Math.min(proc.systemState, 3);\n\nvar line = [\n    now.toISOString(),\n    stateNames[stateIdx],\n    proc.totalCount || 0,\n    proc.blueCount || 0,\n    proc.greenCount || 0,\n    proc.metalCount || 0,\n    vision,\n    sensors.atExit ? 1 : 0,\n    sensors.emergencyStop ? 1 : 0\n].join(';'); // Usamos punto y coma para Excel\n\nvar dateStr = now.toISOString().split('T')[0];\nvar headerKey = 'csv_header_final_v1_' + dateStr;\n\n// Si es la primera vez que escribimos hoy (o desde el deploy), inyectamos la cabecera\nvar finalPayload = \"\";\nif (!global.get(headerKey)) {\n    finalPayload = \"timestamp;estado;total_piezas;azules;verdes;metalicas;vision_sensor;at_exit;emergency_stop\\n\";\n    global.set(headerKey, true);\n}\n\nfinalPayload += line;\nmsg.payload = finalPayload;\nmsg.filename = 'C:/Users/felex/Documents/Final Redes/reports/historial_' + dateStr + '.csv';\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 800,
+        "y": 400,
+        "wires": [
+            [
+                "file_append_csv"
+            ]
+        ]
+    },
+    {
+        "id": "file_append_csv",
+        "type": "file",
+        "z": "flow_plc",
+        "name": "Save to CSV",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 1000,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "btn_generar_informe",
+        "type": "ui_button",
+        "z": "flow_datos",
+        "group": "ui_grp_informes",
+        "order": 1,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "📄 GENERATE REPORT",
+        "tooltip": "Descargar informe del día actual",
+        "color": "#FFFFFF",
+        "bgcolor": "#009688",
+        "className": "",
+        "icon": "file_download",
+        "payload": "generate",
+        "payloadType": "str",
+        "topic": "report",
+        "topicType": "str",
+        "x": 200,
+        "y": 240,
+        "wires": [
+            [
+                "func_notify_report"
+            ]
+        ]
+    },
+    {
+        "id": "func_notify_report",
+        "type": "function",
+        "z": "flow_datos",
+        "name": "Notify Download URL",
+        "func": "var now = new Date();\nvar dateStr = now.toISOString().split('T')[0];\nvar mensaje = \"<div style='text-align: center; color: white;'>\";\nmensaje += \"✅ Informe del \" + dateStr + \" disponible.<br>\";\nmensaje += \"Ruta: Final Redes/reports/historial_\" + dateStr + \".csv<br>\";\nmensaje += \"<a href='/report?fecha=\" + dateStr + \"' target='_blank' style='color: #4db8ff; text-decoration: none; font-weight: bold;'>Descargar: localhost:1880/report?fecha=\" + dateStr + \"</a>\";\nmensaje += \"</div>\";\nmsg.payload = mensaje;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 470,
+        "y": 240,
+        "wires": [
+            [
+                "txt_report_status"
+            ]
+        ]
+    },
+    {
+        "id": "txt_report_status",
+        "type": "ui_text",
+        "z": "flow_datos",
+        "group": "ui_grp_informes",
+        "order": 2,
+        "width": 8,
+        "height": 2,
+        "name": "Report Status",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 700,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "http_informe",
+        "type": "http in",
+        "z": "flow_datos",
+        "name": "GET /report",
+        "url": "/report",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 340,
+        "wires": [
+            [
+                "func_read_informe"
+            ]
+        ]
+    },
+    {
+        "id": "func_read_informe",
+        "type": "function",
+        "z": "flow_datos",
+        "name": "Read Report CSV",
+        "func": "var fecha = msg.req.query.fecha;\nif (!fecha) {\n    var now = new Date();\n    fecha = now.toISOString().split('T')[0];\n}\nmsg.filename = \"C:/Users/felex/Documents/Final Redes/reports/historial_\" + fecha + \".csv\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 400,
+        "y": 340,
+        "wires": [
+            [
+                "file_read_informe"
+            ]
+        ]
+    },
+    {
+        "id": "file_read_informe",
+        "type": "file in",
+        "z": "flow_datos",
+        "name": "Read CSV File",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": true,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 620,
+        "y": 340,
+        "wires": [
+            [
+                "http_response_informe"
+            ]
+        ]
+    },
+    {
+        "id": "http_response_informe",
+        "type": "http response",
+        "z": "flow_datos",
+        "name": "Respond CSV",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "text/csv",
+            "Content-Disposition": "attachment"
+        },
+        "x": 830,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "tmpl_informes_header",
+        "type": "ui_template",
+        "z": "flow_datos",
+        "group": "ui_grp_informes",
+        "name": "Report Info",
+        "order": 0,
+        "width": 12,
+        "height": 2,
+        "format": "<div style=\"padding:18px;background:linear-gradient(135deg,#0d1b2a,#162a4a);border-radius:14px;border:1px solid #00d2ff22\">\n  <h3 style=\"color:#00d2ff;margin:0 0 10px 0;font-size:16px;font-weight:700;letter-spacing:1px\">📊 Report Generation</h3>\n  <p style=\"color:#475569 !important; font-weight: 500 !important;margin:0;font-size:13px;line-height:1.6\">Los datos del proceso se registran automáticamente en CSV. Presione el botón para generar el informe del día.</p>\n  <p style=\"color:#333333 !important;margin:10px 0 0 0;font-size:12px\"><code style=\"color:#00d2ff;background:#0d1b2a;padding:2px 6px;border-radius:4px\">Final Redes/reports/</code> &nbsp;|&nbsp; <a href=\"/report\" style=\"color:#00d2ff;text-decoration:none\" target=\"_blank\">localhost:1880/report</a></p>\n</div>",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 180,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "comment_data",
+        "type": "comment",
+        "z": "flow_datos",
+        "name": "═══ DATA LOGGING & CSV REPORTS ═══",
+        "info": "Guarda datos en CSV cada ciclo de lectura.\nEndpoint HTTP para descarga: GET /report?fecha=YYYY-MM-DD",
+        "x": 260,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "tmpl_chart_title",
+        "type": "ui_template",
+        "z": "flow_plc",
+        "group": "ui_grp_tendencias",
+        "name": "Chart Title",
+        "order": 0,
+        "width": 12,
+        "height": 1,
+        "format": "<div style=\"text-align:center; padding: 8px 0 2px 0;\"><span style=\"color:#334155 !important; font-size:16px; font-weight:600; font-style:italic; letter-spacing:0.5px;\">Variables del Proceso en Tiempo Real</span></div>",
+        "storeOutMessages": false,
+        "fwdInMessages": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "chart-light-bg",
+        "x": 830,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "chart_tendencias",
+        "type": "ui_chart",
+        "z": "flow_plc",
+        "group": "ui_grp_tendencias",
+        "order": 1,
+        "width": "12",
+        "height": "6",
+        "name": "Real-Time Trends",
+        "label": "",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Esperando datos del PLC...",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "5",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00d2ff",
+            "#4caf50",
+            "#ff9800",
+            "#f44336",
+            "#9c27b0",
+            "#ffeb3b"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "chart-light-bg",
+        "x": 830,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "mqtt_in_vision_result",
+        "type": "mqtt in",
+        "z": "flow_vision",
+        "name": "📊 Vision Result",
+        "topic": "planta/vision/resultado",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "cfg_mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "func_parse_vision"
+            ]
+        ]
+    },
+    {
+        "id": "func_parse_vision",
+        "type": "function",
+        "z": "flow_vision",
+        "name": "Parse Python Vision Result",
+        "func": "var data = msg.payload;\nvar colorMap = {\n    \"AZUL\": \"🔵 AZUL\",\n    \"VERDE\": \"🟢 VERDE\",\n    \"METALICO\": \"⚪ METÁLICO\",\n    \"NINGUNO\": \"⚫ Sin detección\"\n};\n\nvar msgColor = { payload: colorMap[data.color_detectado] || data.color_detectado };\n\nvar c = data.contadores || {};\nvar msgCounters = {\n    payload: \"🔵 \" + (c.AZUL||0) + \"  🟢 \" + (c.VERDE||0) + \"  ⚪ \" + (c.METALICO||0) + \"  📦 \" + (c.TOTAL||0)\n};\n\nvar msgTime = {\n    payload: data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : \"--\"\n};\n\nflow.set(\"vision_data\", data);\nreturn [msgColor, msgCounters, msgTime];",
+        "outputs": 3,
+        "timeout": "",
+        "noerr": 0,
+        "x": 440,
+        "y": 120,
+        "wires": [
+            [
+                "txt_vision_color"
+            ],
+            [
+                "txt_vision_counters"
+            ],
+            [
+                "txt_vision_time"
+            ]
+        ]
+    },
+    {
+        "id": "txt_vision_color",
+        "type": "ui_text",
+        "z": "flow_vision",
+        "group": "ui_grp_deteccion",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "name": "Detected Color",
+        "label": "Detected Color",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 700,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "txt_vision_counters",
+        "type": "ui_text",
+        "z": "flow_vision",
+        "group": "ui_grp_deteccion",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "name": "Vision Counters",
+        "label": "Counters",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 700,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "txt_vision_time",
+        "type": "ui_text",
+        "z": "flow_vision",
+        "group": "ui_grp_deteccion",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "name": "Last Detection",
+        "label": "Last update",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 710,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "mqtt_in_vision_img",
+        "type": "mqtt in",
+        "z": "flow_vision",
+        "name": "📷 Processed Image",
+        "topic": "planta/vision/imagen",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "cfg_mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "tmpl_camera_view"
+            ]
+        ]
+    },
+    {
+        "id": "tmpl_camera_view",
+        "type": "ui_template",
+        "z": "flow_vision",
+        "group": "ui_grp_camara",
+        "name": "Live Camera Feed",
+        "order": 1,
+        "width": 12,
+        "height": 8,
+        "format": "<div style=\"\n  text-align:center;padding:0;border-radius:14px;overflow:hidden;\n  background:#0a0e27;height:100%;box-sizing:border-box;\n  border:1px solid rgba(0,210,255,0.15);position:relative;\n\">\n  <div style=\"background:linear-gradient(90deg,#162a4a,#1a3556);padding:10px;border-bottom:1px solid #00d2ff22\">\n    <span style=\"color:#00d2ff;font-size:13px;font-weight:600;letter-spacing:1px\">📹 DETECTION CAMERA — LIVE</span>\n  </div>\n  <div style=\"padding:4px\">\n    <img src=\"{{msg.payload || ''}}\" style=\"width:100%;max-height:400px;object-fit:contain;border-radius:8px;display:{{msg.payload ? 'block' : 'none'}}\" />\n    <div style=\"display:{{msg.payload ? 'none' : 'flex'}};align-items:center;justify-content:center;height:300px;color:#5a7a9a;font-size:14px\">\n      <div style=\"text-align:center\">\n        <div style=\"font-size:40px;margin-bottom:10px;opacity:0.4\">📷</div>\n        <div>Color classification via OpenCV + MQTT</div>\n        <div style=\"color:#3a5a7a;margin-top:5px;font-size:12px\">Waiting for detector connection...</div>\n      </div>\n    </div>\n  </div>\n</div>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "mqtt_in_vision_status",
+        "type": "mqtt in",
+        "z": "flow_vision",
+        "name": "Detector Status",
+        "topic": "planta/vision/estado",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "cfg_mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 170,
+        "y": 340,
+        "wires": [
+            [
+                "func_vision_status"
+            ]
+        ]
+    },
+    {
+        "id": "func_vision_status",
+        "type": "function",
+        "z": "flow_vision",
+        "name": "Detector Status",
+        "func": "var data = msg.payload;\nvar online = data.estado === \"online\";\nmsg.payload = online ? \"🟢 Detector ONLINE\" : \"🔴 Detector OFFLINE\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 410,
+        "y": 340,
+        "wires": [
+            [
+                "txt_vision_status"
+            ]
+        ]
+    },
+    {
+        "id": "txt_vision_status",
+        "type": "ui_text",
+        "z": "flow_vision",
+        "group": "ui_grp_vision_ctrl",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "name": "Detector Status",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 640,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "btn_vision_toggle",
+        "type": "ui_switch",
+        "z": "flow_vision",
+        "group": "ui_grp_vision_ctrl",
+        "name": "ON/OFF Images",
+        "label": "📷 Image Streaming",
+        "tooltip": "",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "check",
+        "oncolor": "#4CAF50",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "close",
+        "offcolor": "#F44336",
+        "animate": true,
+        "className": "",
+        "x": 180,
+        "y": 420,
+        "wires": [
+            [
+                "func_vision_config_img"
+            ]
+        ]
+    },
+    {
+        "id": "func_vision_config_img",
+        "type": "function",
+        "z": "flow_vision",
+        "name": "Image Config",
+        "func": "msg.payload = JSON.stringify({ send_images: msg.payload });\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 420,
+        "y": 420,
+        "wires": [
+            [
+                "mqtt_out_vision_cfg"
+            ]
+        ]
+    },
+    {
+        "id": "btn_vision_reset",
+        "type": "ui_button",
+        "z": "flow_vision",
+        "group": "ui_grp_vision_ctrl",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "Reset Counters",
+        "tooltip": "Reset vision counters",
+        "color": "#FFFFFF",
+        "bgcolor": "#FF5722",
+        "className": "",
+        "icon": "refresh",
+        "payload": "{\"reset_counters\": true}",
+        "payloadType": "json",
+        "topic": "",
+        "topicType": "str",
+        "x": 200,
+        "y": 480,
+        "wires": [
+            [
+                "func_vision_config_reset"
+            ]
+        ]
+    },
+    {
+        "id": "func_vision_config_reset",
+        "type": "function",
+        "z": "flow_vision",
+        "name": "Config Reset",
+        "func": "msg.payload = JSON.stringify(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 420,
+        "y": 480,
+        "wires": [
+            [
+                "mqtt_out_vision_cfg"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_out_vision_cfg",
+        "type": "mqtt out",
+        "z": "flow_vision",
+        "name": "⚙️ Config → Python Detector",
+        "topic": "planta/vision/config",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "cfg_mqtt",
+        "x": 700,
+        "y": 450,
+        "wires": []
+    },
+    {
+        "id": "comment_vision",
+        "type": "comment",
+        "z": "flow_vision",
+        "name": "═══ AI VISION VIA MQTT (Python OpenCV) ═══",
+        "info": "Recibe resultados del detector de colores Python via MQTT.\nMuestra imagen procesada en vivo y contadores de detección.",
+        "x": 280,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "btn_stop_normal",
+        "type": "ui_button",
+        "z": "flow_dashboard",
+        "group": "ui_grp_mando",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "STOP",
+        "tooltip": "Parada normal del sistema",
+        "color": "#FFFFFF",
+        "bgcolor": "#9E9E9E",
+        "className": "",
+        "icon": "",
+        "payload": "1",
+        "payloadType": "num",
+        "topic": "cmd/stop",
+        "topicType": "str",
+        "x": 150,
+        "y": 400,
+        "wires": [
+            [
+                "func_cmd_stop"
+            ]
+        ]
+    },
+    {
+        "id": "func_cmd_stop",
+        "type": "function",
+        "z": "flow_dashboard",
+        "name": "CMD → Stop (%M31)",
+        "func": "// Pulso de STOP NORMAL: true → 500ms → false\nvar addr = 31;\nvar msgOn = { payload: { value: true, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nvar msgOff = { payload: { value: false, fc: 5, unitid: 1, address: addr, quantity: 1 } };\nnode.send(msgOn);\nsetTimeout(function() { node.send(msgOff); }, 500);\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 400,
+        "y": 400,
+        "wires": [
+            [
+                "mb_write_cmd"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_in_qr_bypass",
+        "type": "mqtt in",
+        "z": "flow_vision",
+        "name": "🏷️ QR Bypass Color",
+        "topic": "planta/vision/qr_color",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "cfg_mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 180,
+        "y": 560,
+        "wires": [
+            [
+                "func_qr_to_modbus"
+            ]
+        ]
+    },
+    {
+        "id": "func_qr_to_modbus",
+        "type": "function",
+        "z": "flow_vision",
+        "name": "QR Bypass → %MW1 (Modbus)",
+        "func": "// Escribir bypass_color del QR al Holding Register 1 (%MW1)\n// Valores: 0=Ninguno, 1=Azul, 4=Verde, 7=Metal\nvar data = msg.payload;\nvar bypassColor = data.bypass_color || 0;\n\nnode.status({fill: bypassColor > 0 ? 'yellow' : 'grey', shape: 'dot', text: 'Bypass: ' + (data.color_name || 'NINGUNO')});\n\nmsg.payload = { value: bypassColor, fc: 6, unitid: 1, address: 1 };\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "mb_write_qr_bypass"
+            ]
+        ]
+    },
+    {
+        "id": "mb_write_qr_bypass",
+        "type": "modbus-flex-write",
+        "z": "flow_vision",
+        "name": "Write Bypass to PLC (%MW1)",
+        "showStatusActivities": true,
+        "showErrors": true,
+        "showWarnings": true,
+        "server": "cfg_modbus",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 720,
+        "y": 560,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "inject_poll_alertas",
+        "type": "inject",
+        "z": "flow_alertas",
+        "name": "⏱️ Read data every 2s",
+        "props": [],
+        "repeat": "2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "func_check_alarm"
+            ]
+        ]
+    }
+]

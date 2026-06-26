@@ -1,0 +1,47 @@
+# ══════════════════════════════════════════════════
+# .gitignore — IIoT Sorting Station
+# ══════════════════════════════════════════════════
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# ── MediaPipe AI Model (too large for Git, download instructions in README) ──
+vision/hand_landmarker.task
+
+# ── Generated reports (user data, not source code) ──
+informes/
+*.csv
+
+# ── Node-RED runtime ──
+.node-red/
+node_modules/
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ── IDE / Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.gemini/
+
+# ── Schneider Machine Expert Basic ──
+# (The .smbp project file in plc/ IS tracked intentionally)
+
+# ── Logs ──
+*.log
+npm-debug.log*

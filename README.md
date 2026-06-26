@@ -16,7 +16,7 @@
 
 ---
 
-## 📖 About
+## About
 
 This project implements a complete **Industry 4.0** solution for a simulated Sorting Station. Parts travel on a conveyor belt and are classified by color (blue, green, metallic) using pneumatic actuators controlled by a Schneider M221 PLC.
 
@@ -26,22 +26,22 @@ What makes this project unique is the **Edge AI** layer: a computer vision syste
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 🎛️ **Remote Dashboard** | Real-time web HMI with dark industrial theme, live counters, LED indicators, and trend charts |
-| 🤖 **AI Hand Detection** | MediaPipe-powered finger counting that maps gestures to sorting commands |
-| 📡 **MQTT + Modbus TCP** | Full IT/OT convergence — Python → MQTT → Node-RED → Modbus → PLC |
-| 📲 **WhatsApp Alerts** | Automatic notifications when production thresholds or emergency stops are triggered |
-| 📊 **CSV Report Generation** | One-click export of production history with timestamps, counters, and sensor states |
-| 🎮 **Dual Control** | Operate from the physical Factory IO panel OR the web dashboard simultaneously |
-| 🔴 **Emergency System** | Safety-compliant emergency stop with lockout/reset sequence |
-| 🌐 **Mobile Responsive** | Dashboard accessible from any device on the network |
+| **Remote Dashboard** | Real-time web HMI with dark industrial theme, live counters, LED indicators, and trend charts |
+| **AI Hand Detection** | MediaPipe-powered finger counting that maps gestures to sorting commands |
+| **MQTT + Modbus TCP** | Full IT/OT convergence — Python → MQTT → Node-RED → Modbus → PLC |
+| **WhatsApp Alerts** | Automatic notifications when production thresholds or emergency stops are triggered |
+| **CSV Report Generation** | One-click export of production history with timestamps, counters, and sensor states |
+| **Dual Control** | Operate from the physical Factory IO panel OR the web dashboard simultaneously |
+| **Emergency System** | Safety-compliant emergency stop with lockout/reset sequence |
+| **Mobile Responsive** | Dashboard accessible from any device on the network |
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────┐     Modbus TCP      ┌─────────────────────┐
@@ -129,7 +129,7 @@ python detector.py --mode screen
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 > *Add screenshots of your dashboard, Factory IO scene, and hand detection in action here.*
 
@@ -141,7 +141,7 @@ python detector.py --mode screen
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
@@ -156,7 +156,7 @@ python detector.py --mode screen
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 iiot-sorting-station/
@@ -179,7 +179,7 @@ iiot-sorting-station/
 
 ---
 
-## 🔑 Key MQTT Topics
+## Key MQTT Topics
 
 | Topic | Direction | Description |
 |-------|-----------|-------------|
@@ -191,17 +191,16 @@ iiot-sorting-station/
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👨🏻‍💻 Author
+## Author
 
 **Jhoan Felipe Delgado Acevedo** — Industrial Networks & Communications Engineering Student
 
-* GitHub: [@Felipe-JDA](https://github.com/Felipe-JDA)
 * LinkedIn: [Jhoan Felipe Delgado Acevedo](https://www.linkedin.com/in/jhoan-felipe-delgado-acevedo-8240a2355)
 
 ---

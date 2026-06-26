@@ -197,12 +197,12 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ---
 
-## 👤 Author
+## 👨🏻‍💻 Author
 
-**Félex** — Industrial Networks & Communications Engineering Student
+**Jhoan Felipe Delgado Acevedo** — Industrial Networks & Communications Engineering Student
 
-- GitHub: [@your-username](https://github.com/your-username)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/your-profile)
+* GitHub: [@Felipe-JDA](https://github.com/Felipe-JDA)
+* LinkedIn: [Jhoan Felipe Delgado Acevedo](https://www.linkedin.com/) *(Añade aquí tu link real)*
 
 ---
 

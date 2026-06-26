@@ -75,11 +75,12 @@ What makes this project unique is the **Edge AI** layer: a computer vision syste
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+)
-- [Python](https://www.python.org/) (3.10+)
-- [Mosquitto MQTT Broker](https://mosquitto.org/)
-- [Factory I/O](https://factoryio.com/) (with Sorting Station scene)
-- [Schneider Machine Expert Basic](https://www.se.com/) (for PLC programming)
+You must have the following software installed on your system:
+- **Node.js** (v18+)
+- **Python** (3.10+)
+- **Mosquitto MQTT Broker**
+- **Factory I/O** (with Sorting Station scene)
+- **Schneider Machine Expert Basic** (for PLC programming)
 
 ### 1. Install Node-RED and required palettes
 
@@ -107,7 +108,7 @@ cd vision/
 pip install -r requirements.txt
 ```
 
-> **Note:** The `hand_landmarker.task` model file (~7.5 MB) is required for hand detection mode. Download it from MediaPipe Models) and place it in the `vision/` directory.
+> **Note:** The `hand_landmarker.task` model file (~7.5 MB) is required for hand detection mode. Download it from Google's MediaPipe models repository and place it in the `vision/` directory.
 
 ### 4. Run the AI detector
 
